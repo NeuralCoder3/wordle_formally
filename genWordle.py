@@ -6,11 +6,7 @@ WRONG = 0
 PRESENT = 1
 CORRECT = 2
 
-
 pairs=[]
-# prase test_case.txt
-# the format is like:
-# guess word result
 
 with open('test_case.txt', 'r') as f:
     for line in f:
@@ -57,9 +53,7 @@ for g,w,res in pairs:
         s.add(Or(fc[i]==CORRECT, fc[i]==PRESENT, fc[i]==WRONG))
         
         # equal => green and marked
-        # s.add(Equals(gc[i] == wc[i], And(mc[i] == i, fc[i] == CORRECT)))
         s.add(Equals(gc[i] == wc[i], fc[i] == CORRECT))
-        # s.add(Equals(gc[i] == wc[i], mc[i] == i)) # subsumed
         
         for j in range(k):
             s.add(Implies(mc[j]==i, And(wc[j]==gc[i],Or(fc[i]==CORRECT, fc[i]==PRESENT))))
@@ -72,9 +66,12 @@ for g,w,res in pairs:
         
         s.add(mc[i]<k)
         
-        # exFormI = []
-        # for j in range(k):
-        #     exFormI.append(And(gc[i] == wc[j], mc[j] != i))
+        s.add(Implies(
+            And(gc[i] != wc[i],
+                someMarked),
+            fc[i] == PRESENT
+        ))
+        
         smallerUnmarkedList = []
         for i2 in range(k):
             if i2>=i:
@@ -86,24 +83,6 @@ for g,w,res in pairs:
                                 Not(Or(aux))))
         noSmallerUnmarked = Not(Or(smallerUnmarkedList))
             
-        # not equal =>
-        #   (I) if exists the letter in the word 
-        #   and it is not marked
-        #  (II) and no equal letter before in g is unmarked
-        # s.append(Equals(
-        #     And(gc[i] != wc[i], 
-        #         Or(exFormI),
-        #         Not(Or(exFormII))
-        #     ),
-        #     fc[i] == PRESENT
-        # ))
-        
-        s.add(Implies(
-            And(gc[i] != wc[i],
-                someMarked),
-            fc[i] == PRESENT
-        ))
-        
         s.add(Implies(
             fc[i] == PRESENT,
             And(someMarked,
@@ -123,19 +102,8 @@ for g,w,res in pairs:
         
         s.add(Implies(
             fc[i]==WRONG,
-            # Or(
-                # Not(charExists),
-                allMarkedDiff
-            # )
+            allMarkedDiff
         ))
-        
-        
-        
-        # s.add(Implies(gc[i] != wc[i], 
-        #     Implies(And(
-        #         Or(exFormI), 
-        #         Not(Or(exFormII))),
-        #     fc[i] == PRESENT)))
         
         # überflüssig?
         s.add(Implies(Not(charExists), And(fc[i] == WRONG,Not(someMarked))))
@@ -144,7 +112,6 @@ for g,w,res in pairs:
     print("w: ", w)
     if s.check() == sat:
         model = s.model()
-        # print(model)
         fs=""
         for f in fc:
             if model[f] == CORRECT:
@@ -160,12 +127,4 @@ for g,w,res in pairs:
         if fs!=res:
             print("wrong result")
             exit(1)
-        # ms=""
-        # for i,m in enumerate(mc):
-        #     if model[m].as_long()>0:
-        #         ms+=str(model[m])
-        #     else:
-        #         ms+="_"
-        #     ms+=" "
-        # print(ms)
     print("")
