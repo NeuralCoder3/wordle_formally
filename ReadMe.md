@@ -9,8 +9,8 @@ The wordle rules look simple. But it is tricky to formalize them.
 - Otherwise the result is wrong ($f[i]={\color{black}\text{WRONG}}$).
 
 The formal specification of the feedback is split into parts for better readability.
-In every formula, we quantify over the position $i$.
-We use theories in the formulas but everything could be lowered to first-order logic in a straight-forward way.
+In every formula, we quantify over the position $i$. The idea is to describe for a position $i$ what the feedback is. Due to symmetry, every position is handled the same.
+We use integer theories in the formulas but everything could be lowered to first-order logic in a straight-forward way (or CP/SMT solvers can be used).
 
 For every part, we will give the formula and a reading in natural language.
 
@@ -85,7 +85,7 @@ If there is not corresponding character in $w$, the character in $g$ is assigned
 The whole formula is:
 
 $$
-\forall g~w.~\exists f~w.~\forall i.~ \\
+\forall g~w.~\exists f~m.~\forall i.~ \\
 (f[i]={\color{green}\text{CORRECT}} \lor f[i]={\color{orange}\text{PRESENT}} \lor f[i]={\color{black}\text{WRONG}}) \land \\
 (f[i]={\color{green}\text{CORRECT}} \leftrightarrow g[i]=w[i]) \land \\
 (\forall j.~m[j]=i \to w[j]=g[i] \land (f[i]={\color{green}\text{CORRECT}} \lor f[i]={\color{orange}\text{PRESENT}})) \land \\
