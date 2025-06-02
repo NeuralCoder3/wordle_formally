@@ -60,10 +60,10 @@ A present cell has to be marked and no previous cell of same content can be unma
 
 $f[i]={\color{black}\text{WRONG}} \to \forall j.~w[j]=g[i]\to m[j]\geq 0\land m[j]\neq i$
 
-A wrong char either has no correspondence in $w$ ($\lnot (\exists j.~ g[i]\neq w[j])$ which is already included in the second part) or is a failed present.
+A wrong char either has no correspondence in $w$ ($\lnot (\exists j.~ g[i] = w[j])$ which is already included in the second part) or is a failed present.
 That is, every corresponding character is marked.
 
-$\lnot (\exists j.~ g[i]\neq w[j]) \to f[i]={\color{black}\text{WRONG}} \land \lnot \mathrm{someMarked}$
+$\lnot (\exists j.~ g[i] = w[j]) \to f[i]={\color{black}\text{WRONG}} \land \lnot \mathrm{someMarked}$
 
 If there is not corresponding character in $w$, the character in $g$ is assigned wrong.
 
@@ -85,6 +85,6 @@ m[i]<|g| \land \\
   \forall \mathrm{noSmallerUnmarked}.~ (\mathrm{noSmallerUnmarked} \leftrightarrow \lnot \exists i_2.~ i_2\lt i \land g[i]=g[i_2] \land \lnot \exists l.~m[l]=i_2) \to \\
 (f[i]={\color{orange}\text{PRESENT}} \to \mathrm{someMarked} \land \mathrm{noSmallerUnmarked}) \land \\
 (f[i]={\color{black}\text{WRONG}} \to \forall j.~w[j]=g[i]\to m[j]\geq 0\land m[j]\neq i) \land \\
-(\lnot (\exists j.~ g[i]\neq w[j]) \to f[i]={\color{black}\text{WRONG}} \land \lnot \mathrm{someMarked})
+(\lnot (\exists j.~ g[i] = w[j]) \to f[i]={\color{black}\text{WRONG}} \land \lnot \mathrm{someMarked})
 
 $$
